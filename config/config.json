@@ -1,0 +1,25 @@
+{
+  "environment": "qa",
+
+  "qa": {
+    "base_url": "https://qa.your-app-url.com"
+  },
+
+  "uat": {
+    "base_url": "https://uat.your-app-url.com"
+  },
+
+  "prod": {
+    "base_url": "https://your-app-url.com"
+  },
+
+  "browser": "chromium",
+  "headless": false,
+
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+
+  "timeout": 30000
+}
