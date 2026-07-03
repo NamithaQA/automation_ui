@@ -1,63 +1,70 @@
 import pytest
 from playwright.sync_api import sync_playwright
+from utils.config import get_config
 
-from utils.config import BROWSER, HEADLESS, VIEWPORT, TIMEOUT
+
+def pytest_addoption(parser):
+    parser.addoption(
+        "--env",
+        action="store",
+        default="qa",
+        help="Environment to run tests against: qa, uat, prod"
+    )
+
+
+# ENV FIXTURE
+@pytest.fixture(scope="session")
+def env(request):
+    return request.config.getoption("--env")
+
+
+# CONFIG FIXTURE
+@pytest.fixture(scope="session")
+def config(env):
+    return get_config(env)
 
 
 @pytest.fixture(scope="session")
 def playwright_instance():
-    """
-    Starts Playwright once for the entire test session.
-    """
     with sync_playwright() as playwright:
         yield playwright
 
 
 @pytest.fixture(scope="function")
-def browser(playwright_instance):
-    """
-    Launches the browser before each test and closes it afterwards.
-    """
-    if BROWSER.lower() == "chromium":
-        browser = playwright_instance.chromium.launch(headless=HEADLESS)
+def browser(playwright_instance, config):
+    browser_type = config["browser"]
+    headless = config["headless"]
 
-    elif BROWSER.lower() == "firefox":
-        browser = playwright_instance.firefox.launch(headless=HEADLESS)
+    if browser_type == "chromium":
+        browser = playwright_instance.chromium.launch(headless=headless)
 
-    elif BROWSER.lower() == "webkit":
-        browser = playwright_instance.webkit.launch(headless=HEADLESS)
+    elif browser_type == "firefox":
+        browser = playwright_instance.firefox.launch(headless=headless)
+
+    elif browser_type == "webkit":
+        browser = playwright_instance.webkit.launch(headless=headless)
 
     else:
-        raise ValueError(f"Unsupported browser: {BROWSER}")
+        raise ValueError(f"Unsupported browser: {browser_type}")
 
     yield browser
-
     browser.close()
 
 
 @pytest.fixture(scope="function")
-def context(browser):
-    """
-    Creates a new browser context for each test.
-    """
+def context(browser, config):
     context = browser.new_context(
-        viewport=VIEWPORT
+        viewport=config["viewport"]
     )
 
-    context.set_default_timeout(TIMEOUT)
+    context.set_default_timeout(config["timeout"])
 
     yield context
-
     context.close()
 
 
 @pytest.fixture(scope="function")
 def page(context):
-    """
-    Creates a new page for each test.
-    """
     page = context.new_page()
-
     yield page
-
     page.close()
