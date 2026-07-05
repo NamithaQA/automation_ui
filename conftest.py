@@ -57,11 +57,16 @@ def context(browser, config):
         viewport=config["viewport"]
     )
 
-    context.set_default_timeout(config["timeout"])
+    context.tracing.start(
+        screenshots=True,
+        snapshots=True,
+        sources=True
+    )
 
     yield context
-    context.close()
 
+    context.tracing.stop(path="reports/trace.zip")
+    context.close()
 
 @pytest.fixture(scope="function")
 def page(context):
