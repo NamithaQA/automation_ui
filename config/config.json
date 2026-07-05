@@ -2,7 +2,7 @@
   "environment": "qa",
 
   "qa": {
-    "base_url": "https://qa.your-app-url.com"
+    "base_url": "https://mb.io/"
   },
 
   "uat": {
