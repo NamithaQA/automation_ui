@@ -3,7 +3,6 @@ from playwright.sync_api import expect
 from pages.home_page import HomePage
 
 
-
 def test_trading_functionality(page, config):
     """Test trading func, verify spot trading section is rendered, trading pair entries contain expected data"""
     home = HomePage(page)
