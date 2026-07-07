@@ -11,11 +11,22 @@ def pytest_addoption(parser):
         help="Environment to run tests against: qa, uat, prod"
     )
 
+    parser.addoption(
+        "--browser",
+        action="store",
+        default="chromium",
+        help="Browser to run tests against: chromium, firefox, webkit"
+    )
+
 
 # ENV FIXTURE
 @pytest.fixture(scope="session")
 def env(request):
     return request.config.getoption("--env")
+
+@pytest.fixture(scope="session")
+def browser_name(request):
+    return request.config.getoption("--browser")
 
 
 # CONFIG FIXTURE
@@ -31,8 +42,8 @@ def playwright_instance():
 
 
 @pytest.fixture(scope="function")
-def browser(playwright_instance, config):
-    browser_type = config["browser"]
+def browser(playwright_instance, config, browser_name):
+    browser_type = browser_name
     headless = config["headless"]
 
     if browser_type == "chromium":
