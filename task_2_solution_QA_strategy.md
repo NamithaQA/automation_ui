@@ -5,7 +5,6 @@
 - Firstly I would start exploring the app as a user without any deep technical knowledge. This helps to understand how smooth the user experience is and catch the bugs.
 - Secondly, Go through product PRD's (maybe use AI tools to get summary), meet Product Managers and Dev to understand the core user workflows and business rules.
 - Identifying critical workflows involving user funds, wallets/FX - like balances, transactions, failed payments
-- Identify
 - Understanding the system architecture, APIs, environments, and any third-party integrations and their dependencies.
 - Reviewing existing requirements, user stories, designs, and known issues.
 - Setting up the testing environment and ensuring stable test accounts are available.
