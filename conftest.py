@@ -1,5 +1,7 @@
+import os
 import pytest
 from playwright.sync_api import sync_playwright
+
 from utils.config import get_config
 
 
@@ -45,6 +47,9 @@ def playwright_instance():
 def browser(playwright_instance, config, browser_name):
     browser_type = browser_name
     headless = config["headless"]
+
+    if os.getenv("CI") == "true":
+        headless = True
 
     if browser_type == "chromium":
         browser = playwright_instance.chromium.launch(headless=headless)
